@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Bluetooth_1</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="connect">Connect</string>
+    <string name="msg">connected</string>
+    <string name="TakePhoto" />
+</resources>
