@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home">
+    android:background="#069E8F"
+    tools:context=".Read">
 
     <Button
-        android:id="@+id/btnhome"
-        android:layout_width="270dp"
-        android:layout_height="211dp"
-        android:text="Take Photo"
+        android:id="@+id/audioStreamBtn"
+        android:layout_width="291dp"
+        android:layout_height="240dp"
+        android:text="Launch Streaming"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
