@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -65,6 +66,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        public MediaPlayer welcomemsg= MediaPlayer.create(MainActivity.this,R.raw.homeaudio); // welcome voice message
+        public MediaPlayer opencamera= MediaPlayer.create(MainActivity.this,R.raw.opencamera); // welcome voice message
+        public MediaPlayer takepic = MediaPlayer.create(MainActivity.this,R.raw.takepicture); //take picture voice command
+        public MediaPlayer scanpage = MediaPlayer.create(MainActivity.this,R.raw.scanpage);
+        public MediaPlayer downloadaudio = MediaPlayer.create(MainActivity.this,R.raw.downloadaudio);
+
 
         public final static String MODULE_MAC = "98:D3:11:FC:44:DD";
 
@@ -99,6 +106,21 @@ public class MainActivity extends AppCompatActivity {
 
             capture = (Button)findViewById(R.id.btnphoto);
             upload = (Button)findViewById(R.id.btnupload);
+
+
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+             e.printStackTrace();
+            }
+            welcomemsg.start();
+
+            try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+            opencamera.start(); // camera opening voice command
 
         capture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -289,20 +311,23 @@ public class MainActivity extends AppCompatActivity {
                         if(msg.what == ConnectedThread.RESPONSE_MESSAGE){
                             String txt = (String)msg.obj;
                             if(txt.equals("home")){
+                                welcomemsg.start();
                                 Toast.makeText(MainActivity.this, "Welcome! Press 2nd button", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(MainActivity.this,  MainActivity.class);
                                 startActivity(intent);
                             }
                             else if(txt.equals("take photo")){
+
                                 dispatchTakePictureIntent();
-/*
+
                                 try {
-                                    TimeUnit.SECONDS.sleep(10);
+                                    TimeUnit.SECONDS.sleep(8);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
 
- */
+                                scanpage.start();
+
                                 //Intent intent = new Intent(MainActivity.this,   MainActivity.class);
                                 //startActivity(intent);
                             }
@@ -310,10 +335,19 @@ public class MainActivity extends AppCompatActivity {
                                // Intent intent = new Intent(MainActivity.this,   Upload.class);
                                 //startActivity(intent);
                                 Toast.makeText(MainActivity.this, "Scanning the photo, please wait", Toast.LENGTH_LONG).show();
+                                downloadaudio.start();
+                                try {
+                                    TimeUnit.SECONDS.sleep(6);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                                 uploadPhoto();
                             }
                             else if(txt.equals("read")){
+
                                 //reads the captured image out loud and goes to volume/speed control section
+
+
                                 Toast.makeText(MainActivity.this, "Touch the screen to listen", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(MainActivity.this,  Read.class);
                                 startActivity(intent);
@@ -401,6 +435,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takepic.start();
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
@@ -419,6 +454,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         }
+
     }
     private void uploadPhoto() {
         encodedString = getFileToByte(currentPhotoPath);

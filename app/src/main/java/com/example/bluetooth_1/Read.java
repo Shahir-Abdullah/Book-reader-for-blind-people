@@ -20,12 +20,19 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.concurrent.TimeUnit;
+
 public class Read extends AppCompatActivity {
     private Button btn;
     private boolean playPause;
     private MediaPlayer mediaPlayer;
     private ProgressDialog progressDialog;
     private boolean initialStage = true;
+    public MediaPlayer finishaudio = MediaPlayer.create(Read.this,R.raw.finishedaudio);
+    public MediaPlayer pauseaudio = MediaPlayer.create(Read.this,R.raw.pause);
+    public MediaPlayer listenaudio = MediaPlayer.create(Read.this,R.raw.listenaudio);
+    public MediaPlayer returnhome = MediaPlayer.create(Read.this,R.raw.returnhome);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,18 +42,30 @@ public class Read extends AppCompatActivity {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         progressDialog = new ProgressDialog(this);
+        pauseaudio.start();
+        listenaudio.start();
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        pauseaudio.start();
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!playPause) {
+
                     btn.setText("Pause Streaming");
 
                     if (initialStage) {
                         //new Player().execute("https://www.ssaurel.com/tmp/mymusic.mp3");
+
                         new Player().execute("https://9b93e08798f8.ngrok.io");
                     } else {
-                        if (!mediaPlayer.isPlaying())
+                        if (!mediaPlayer.isPlaying()) {
                             mediaPlayer.start();
+                        }
+
                     }
 
                     playPause = true;
@@ -57,7 +76,13 @@ public class Read extends AppCompatActivity {
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.pause();
                     }
-
+                    finishaudio.start();
+                    try {
+                        TimeUnit.SECONDS.sleep(3);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    returnhome.start();
                     playPause = false;
                 }
             }
